@@ -5,7 +5,35 @@ class BST:
     def __init__(self):
         self.root = None
 
+    def search(self, key):
+        current_node = self.root
+        while current_node is not None:
+            if key == current_node.key:
+                return current_node  # found
+            elif key < current_node.key:
+                current_node = current_node.left
+            else:
+                current_node = current_node.right
+        return None  # Not found
 
+    def insert(self, node):
+        if self.root is None:
+            self.root = node
+        else:
+            current_node = self.root
+            while current_node is not None:
+                if node.key < current_node.key:
+                    if current_node.left is None:
+                        current_node.left = node
+                        current_node = None
+                    else:
+                        current_node = current_node.left
+                else:
+                    if current_node.right is None:
+                        current_node.right = node
+                        current_node = None
+                    else:
+                        current_node = current_node.right
 
     def remove(self, key):
         parent = None
