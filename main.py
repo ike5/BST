@@ -1,3 +1,4 @@
+import random
 from Node import Node
 
 
@@ -96,7 +97,7 @@ class BST:
         if node is None:
             return
         self.print_in_order(node.left)
-        print(node)
+        print(node.key)
         self.print_in_order(node.right)
 
     def get_height(self, node):
@@ -106,7 +107,11 @@ class BST:
         right_height = self.get_height(node.right)
         return 1 + max(left_height, right_height)
 
-    def insert(self, node):
+    """
+    BST Insert algorithm for BST with nodes containing parent pointers
+    """
+
+    def bst_insert(self, node):
         if self.root is None:
             self.root = node
             node.parent = None
@@ -129,6 +134,26 @@ class BST:
                 else:
                     cur = cur.right
 
+    def replace_child(self, parent, current_child, new_child):
+        if parent.left != current_child and parent.right != current_child:
+            return False
+
+        if parent.left == current_child:
+            parent.left = new_child
+        else:
+            parent.right = new_child
+
+        if new_child is not None:
+            new_child.parent = parent
+
+        return True
+
 
 if __name__ == "__main__":
-    pass
+    tree = BST()
+
+    for i in range(100):
+        random_key = random.randint(0, 1_000)
+        tree.insert(Node(random_key))
+
+    tree.print_in_order(tree.root)
