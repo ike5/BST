@@ -206,3 +206,17 @@ def bst_search_recursive(node: Node, key):
         else:
             return bst_search_recursive(node.right, key)
     return None
+
+
+def bst_get_parent(tree, node: Node):
+    return bst_get_parent_recursive(tree.root, node)
+
+
+def bst_get_parent_recursive(subtree_root, node: Node):
+    if subtree_root is None:
+        return None
+    if subtree_root.left == node or subtree_root.right == node:
+        return subtree_root
+    if node.key < subtree_root.key:
+        return bst_get_parent_recursive(subtree_root.left, node)
+    return bst_get_parent_recursive(subtree_root.right, node)
