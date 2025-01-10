@@ -140,7 +140,7 @@ def bst_insert(root, node):
                 cur = cur.right
 
 
-def replace_child(parent, current_child, new_child):
+def bst_replace_child(parent, current_child, new_child):
     if parent.left != current_child and parent.right != current_child:
         return False
 
@@ -155,12 +155,12 @@ def replace_child(parent, current_child, new_child):
     return True
 
 
-def remove_key(root, key):
-    node = root.search(key)
-    root.remove_node(node)
+def bst_remove_key(tree, key):
+    node = bst_search(tree, key)
+    bst_remove_node(tree, node)
 
 
-def remove_node(root, node):
+def bst_remove_node(tree, node: Node):
     if node is None:
         return
 
@@ -174,21 +174,35 @@ def remove_node(root, node):
         node = copy.copy(successor_node)
 
         # recursively remove successor_node
-        root.remove_node(successor_node)
+        bst_remove_node(tree, successor_node)
+
+    # case 2: root node with 1 or 0 children
+    elif node == tree.root:
+        if node.left is not None:
+            tree.root = node.left
+        else:
+            tree.root = node.right
+        # make sure the new root if non-null has a null parent
+        if tree.root is not None:
+            tree.root.parent = None
+    # case 3: Internal with left child only
+    elif node.left is not None:
+        bst_replace_child(node.parent, node, node.left)
+    # case 4: Internal with right child only or leaf
     else:
-        pass  # todo fix this
+        bst_replace_child(node.parent, node, node.right)
 
 
-def bst_search(root, key):
-    return bst_search_recursive(root, key)
+def bst_search(tree, key):
+    return bst_search_recursive(tree.root, key)
 
 
-def bst_search_recursive(node, key):
+def bst_search_recursive(node: Node, key):
     if node is not None:
         if key == node.key:
             return node
         elif key < node.key:
-            return node.BST_search_recursive(node.left, key)
+            return bst_search_recursive(node.left, key)
         else:
-            return node.BST_search_recursive(node.right, key)
+            return bst_search_recursive(node.right, key)
     return None
