@@ -245,11 +245,11 @@ def bst_insert_recursive(parent, node_to_insert):
 def bst_remove_rec(tree, key):
     node = bst_search(tree, key)
     parent = bst_get_parent(tree, node)
-    bst_remove_node(tree, parent, node)
+    bst_remove_node_rec(tree, parent, node)
 
 
-def bst_remove_node(tree, parent, node):
-    if node == None:
+def bst_remove_node_rec(tree, parent, node):
+    if node is None:
         return False
 
     # Case 1: Internal node with 2 children
@@ -265,7 +265,7 @@ def bst_remove_node(tree, parent, node):
         node = copy.copy(succ_node)
 
         # recursively remove successor
-        bst_remove_node(tree, succ_parent, succ_node)
+        bst_remove_node_rec(tree, succ_parent, succ_node)
 
     # Case 2: Root node with 1 or 0 children
     elif node == tree.root:
@@ -284,11 +284,10 @@ def bst_remove_node(tree, parent, node):
 
     # Case 4: Internal with right child only or leaf
     else:
-        # replace node with node's right hcild
+        # replace node with node's right child
         if parent.left == node:
             parent.left = node.right
         else:
             parent.right = node.right
 
     return True
-
