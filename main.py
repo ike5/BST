@@ -220,3 +220,75 @@ def bst_get_parent_recursive(subtree_root, node: Node):
     if node.key < subtree_root.key:
         return bst_get_parent_recursive(subtree_root.left, node)
     return bst_get_parent_recursive(subtree_root.right, node)
+
+
+def bst_insert_rec(tree, node):
+    if tree.root is None:
+        tree.root = node
+    else:
+        bst_insert_recursive(tree.root, node)
+
+
+def bst_insert_recursive(parent, node_to_insert):
+    if node_to_insert.key < parent.key:
+        if parent.left is None:
+            parent.left = node_to_insert
+        else:
+            bst_insert_recursive(parent.left, node_to_insert)
+    else:
+        if parent.right is None:
+            parent.right = node_to_insert
+        else:
+            bst_insert_recursive(parent.right, node_to_insert)
+
+
+def bst_remove_rec(tree, key):
+    node = bst_search(tree, key)
+    parent = bst_get_parent(tree, node)
+    bst_remove_node(tree, parent, node)
+
+
+def bst_remove_node(tree, parent, node):
+    if node == None:
+        return False
+
+    # Case 1: Internal node with 2 children
+    if node.left is not None and node.right is not None:
+        # Find successor and successor's parent
+        succ_node = node.right
+        succ_parent = node
+        while succ_node.left is not None:
+            succ_parent = succ_node
+            succ_node = succ_node.left
+
+        # copy the value from the successor node
+        node = copy.copy(succ_node)
+
+        # recursively remove successor
+        bst_remove_node(tree, succ_parent, succ_node)
+
+    # Case 2: Root node with 1 or 0 children
+    elif node == tree.root:
+        if node.left is not None:
+            tree.root = node.left
+        else:
+            tree.root = node.right
+
+    # Case 3: Internal with left child only
+    elif node.left is not None:
+        # replace node with node's left child
+        if parent.left == node:
+            parent.left = node.left
+        else:
+            parent.right = node.left
+
+    # Case 4: Internal with right child only or leaf
+    else:
+        # replace node with node's right hcild
+        if parent.left == node:
+            parent.left = node.right
+        else:
+            parent.right = node.right
+
+    return True
+
